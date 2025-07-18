@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Random Number Picker for FYCS & FYDA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #5EFCE8 0%, #736EFE 100%);
+      font-family: 'Montserrat', Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      background: #fff;
+      padding: 2.5em 3em;
+      border-radius: 22px;
+      box-shadow: 0 14px 40px rgba(115, 110, 254, 0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2em;
+    }
+    .pickers {
+      display: flex;
+      gap: 3em;
+    }
+    .picker {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+      padding: 2em 2em 2em 2em;
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(146, 159, 255, 0.12);
+    }
+    .title {
+      font-size: 2rem;
+      margin-bottom: 1em;
+      letter-spacing: 1.5px;
+      color: #4e54c8;
+      text-shadow: 0 2px 10px #d1defa30;
+    }
+    .number {
+      font-size: 4rem;
+      font-weight: 700;
+      transition: color 0.3s;
+      color: #3528e2;
+      margin-bottom: 1em;
+      height: 1.2em;
+      min-width: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-shadow: 0 4px 18px #5efce870;
+      letter-spacing: 3px;
+    }
+    .btn {
+      background: linear-gradient(90deg, #6a82fb, #fc5c7d);
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding: 0.8em 2.5em;
+      border-radius: 28px;
+      cursor: pointer;
+      margin-top: 0.5em;
+      box-shadow: 0 2px 12px #6a82fb20;
+      transition: transform 0.08s;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+    }
+    .btn:active {
+      transform: scale(0.97);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="pickers">
+      <div class="picker">
+        <div class="title">FYCS</div>
+        <div class="number" id="number-fycs">--</div>
+      </div>
+      <div class="picker">
+        <div class="title">FYDA</div>
+        <div class="number" id="number-fyda">--</div>
+      </div>
+    </div>
+    <button class="btn" onclick="pickBoth()">Pick Random Numbers</button>
+  </div>
+
+  <script>
+    // Customizable number ranges:
+    const RANGES = {
+      fycs: { min: 1, max: 60 },
+      fyda: { min: 1, max: 60 }
+    };
+
+    function startRoll(className) {
+      const numberEl = document.getElementById('number-' + className);
+      let rollCount = 0;
+      const min = RANGES[className].min;
+      const max = RANGES[className].max;
+      let intervalId;
+
+      function roll() {
+        numberEl.textContent = Math.floor(Math.random() * (max - min + 1)) + min;
+        rollCount++;
+        // Gradually slow roll
+        if (rollCount < 12) {
+          intervalId = setTimeout(roll, 27);
+        } else if (rollCount < 22) {
+          intervalId = setTimeout(roll, 70);
+        } else if (rollCount < 27) {
+          intervalId = setTimeout(roll, 110);
+        } else {
+          setTimeout(() => {
+            // Final value:
+            const finalNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+            numberEl.textContent = finalNumber;
+            numberEl.style.color = "#fc5c7d";
+            setTimeout(() => numberEl.style.color = "#3528e2", 900);
+          }, 400);
+        }
+      }
+      roll();
+    }
+
+    function pickBoth() {
+      startRoll('fycs');
+      startRoll('fyda');
+    }
+  </script>
+</body>
+</html>
